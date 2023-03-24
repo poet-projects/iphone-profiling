@@ -133,43 +133,42 @@ class ViewController: UIViewController {
 //            }
 //        }
         
-        var times: [Double] = []
-        
-        let clock = ContinuousClock()
-        let input = try! MLMultiArray(shape: [3072], dataType: .float64)
-        
-        for i in 0..<3072 {
-            input[[i] as [NSNumber]] = Double.random(in:0...2) as NSNumber
-        }
-        
-        for i in 0..<100 {
-            
-            let result = clock.measure {
-                let prediction = try! self.isolatedLayer.prediction(input: isolated_layerInput(input: input))
-            }
-            print(result)
-        }
-        
-        print("DONE PREDICTING")
         
         let tempDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
 
         // Create a destination URL.
         let targetURL = tempDirectoryURL.appendingPathComponent("poet").appendingPathExtension("txy")
+                
+        let clock = ContinuousClock()
         
-        // Paging simulation below
+        for _ in 0..<100 {
+            
+            let input = try! MLMultiArray(shape: [3072], dataType: .float64)
+            
+            for i in 0..<3072 {
+                input[[i] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+            }
+            
+            let result = clock.measure {
+                let prediction = try! self.isolatedLayer.prediction(input: isolated_layerInput(input: input))
+                
+                // Paging simulation below
+                for i in 0..<100 {
+                    do {
+                        let len = prediction.var_5.count
+                        let arr = Array(repeating: Double(i) * 1.1, count: len)
+                        try (
+                            withUnsafeBytes(of: arr) { Data($0) }
+                        ).write(to: targetURL)
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
+            print(result)
+        }
         
-//        do {
-//            let len = prediction.var_1000.count
-//            let arr = Array(repeating: 1.1, count: len)
-//            for _ in 0...200 {
-//                try (
-//                    withUnsafeBytes(of: arr) { Data($0) }
-//                ).write(to: targetURL)
-//            }
-//        } catch {
-//            print(error)
-//        }
+        print("DONE PREDICTING")
         
             DispatchQueue.main.async {
 //                self.answerLabel.text = prediction.var_4
