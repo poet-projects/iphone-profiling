@@ -71,6 +71,8 @@ def profile_layer_by_layer(final_layers: list[str]):
     with open("ViewControllerSkeleton.swift", "r") as f:
         swift_skeleton = f.read()
 
+    swift_input = ""
+
     for layer in final_layers:
         split_layer = layer.split("	[")
         layer_name = split_layer[0]
@@ -90,35 +92,47 @@ def profile_layer_by_layer(final_layers: list[str]):
 
         print("Preparing to profile layer " + layer, end=" ... ")
 
+        model_name = f"{layer_name.lower()}-{'-'.join(input_shape)}-to-{'-'.join(output_shape)}"
+        model_class_name = model_name.replace("-", "_")
+        save = f"model.save('../Resources/{model_name}.mlmodel')"
+
         trace_skeleton = trace_skeleton.replace("# init", init)
         trace_skeleton = trace_skeleton.replace("# forward", forward)
         trace_skeleton = trace_skeleton.replace("# example_input", example_input)
+        trace_skeleton = trace_skeleton.replace("# save", save)
 
         with redirect_stdout(open(os.devnull, 'w')):
             exec(trace_skeleton)
 
-        swift_input = f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .float16)\n"
-        for i in range(len(input_shape)):
-            swift_input += f" for d{i} in 0..<{input_shape[i]} {{"
         joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
-        swift_input += f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n"
-        swift_input += "}" * len(input_shape) + "\n"
 
-        total_output_size = math.prod(output_shape) # number of fp16's
-        # divide by 4 to account for Double --> fp16 conversion
-        pageout_input = f"let arr = (0..<{total_output_size // 4}).map {{ _ in Double.random(in: 1...5) }}\n"
-        # multiple by 2 because there are 2 bytes in every fp16
-        pagein_input = f"let _ = fileHandle.readData(ofLength: {total_output_size * 2})"
+        swift_input += \
+            "for i in 0..<100 {" \
+                f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .float16)\n" \
+                "".join([f" for d{i} in 0..<{input_shape[i]} {{" for i in range(len(input_shape))]) + \
+                f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n" \
+                "}" * len(input_shape) + \
+                f"let prediction = try! {model_class_name}().prediction(input: {model_class_name}Input(input: input))" \
+                "usleep(100000)" \
+                "DispatchQueue.main.async {" \
+                    "self.answerLabel.text = \"prediction \" + String(i + 1) + \"/100\"" \
+                "}" \
+            "}" \
 
-        swift_skeleton = swift_skeleton.replace("// swift_input", swift_input)
-        swift_skeleton = swift_skeleton.replace("// pageout_input", pageout_input)
-        swift_skeleton = swift_skeleton.replace("// pagein_input", pagein_input)
+        # total_output_size = math.prod(output_shape) # number of fp16's
+        # # divide by 4 to account for Double --> fp16 conversion
+        # pageout_input = f"let arr = (0..<{total_output_size // 4}).map {{ _ in Double.random(in: 1...5) }}\n"
+        # # multiple by 2 because there are 2 bytes in every fp16
+        # pagein_input = f"let _ = fileHandle.readData(ofLength: {total_output_size * 2})"
+        
+    swift_skeleton = swift_skeleton.replace("// swift_input", swift_input)
+        # swift_skeleton = swift_skeleton.replace("// pageout_input", pageout_input)
+        # swift_skeleton = swift_skeleton.replace("// pagein_input", pagein_input)
 
-        with open("../CoreMLBert/ViewController.swift", "w") as f:
-            f.write(swift_skeleton)
+    with open("../CoreMLBert/ViewController.swift", "w") as f:
+        f.write(swift_skeleton)
 
-        print("READY!")
-        input()
+    print("READY!")
 
 # unused strategies for tracing PyTorch (might be useful in the future):
 # - torch.jit.script and using the resulting code property

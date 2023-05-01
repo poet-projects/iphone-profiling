@@ -55,15 +55,7 @@ class ViewController: UIViewController {
 
         let targetURL = tempDirectoryURL.appendingPathComponent("poet").appendingPathExtension("txy")
                         
-        for i in 0..<100 {
-            // swift_input
-            let prediction = try! self.isolatedLayer.prediction(input: isolated_layerInput(input: input))
-            usleep(25000)
-
-            DispatchQueue.main.async {
-                self.answerLabel.text = "prediction " + String(i + 1) + "/100"
-            }
-        }
+        // swift_input
 
         // pageout_input
 

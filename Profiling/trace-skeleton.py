@@ -27,4 +27,4 @@ model = ct.convert(
     
 )
 
-model.save("../Resources/isolated-layer.mlmodel")
+# save
