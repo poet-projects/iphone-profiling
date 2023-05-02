@@ -12,4 +12,7 @@ def get_example_input():
     return tokenizer(prompt, return_tensors="pt").input_ids
 
 def get_model():
-    return AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-j-6B")
+    print("Loading GPT-J into memory...")
+    model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-j-6B")
+    print("Finished loading model.")
+    return model

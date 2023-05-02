@@ -17,9 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var answerBtn: UIButton!
     @IBOutlet weak var answerLabel: UILabel!
     let loaderView = LoaderView()
-    
-//    var m = BertForQuestionAnswering(.full)
-    
+        
     let isolatedLayer = isolated_layer()
     
     
@@ -53,128 +51,95 @@ class ViewController: UIViewController {
         answerLabel.text = "Loading..."
         loaderView.isLoading = true
         
-        let question = questionField.text ?? ""
-        let context = subjectField.text ?? ""
-        
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            let inputs = self.m.featurizeTokensClassifier(question: "Hello how are you doing")
-////            let dataPointFeatures: [String: MLFeatureValue] = ["sent_id": MLFeatureValue(multiArray: inputs.sent_id), "mask": MLFeatureValue(multiArray: inputs.mask), "input_true": MLFeatureValue(multiArray: try! MLMultiArray([1, 1, 1, 1, 1]))]
-//            let input_ids = try! MLMultiArray(shape: [2, 11], dataType: .float16) // MLMultiArray.from(stacked, dims: 2)
-//            for i in 0..<11 {
-//                input_ids[[0, i] as [NSNumber]] = 2 as NSNumber
-//            }
-//            for i in 11..<22 {
-//                input_ids[[1, i - 11] as [NSNumber]] = 2 as NSNumber
-//            }
-//            let dataPointFeatures: [String: MLFeatureValue] = ["sent_id": MLFeatureValue(multiArray: input_ids), "mask_1": MLFeatureValue(multiArray: input_ids), "input_true": MLFeatureValue(multiArray: try! MLMultiArray([1, 1, 1, 1, 1]))]
-//            let provider = try! MLDictionaryFeatureProvider(dictionary: dataPointFeatures)
-//
-//            var featureProviders = [MLFeatureProvider]()
-//            featureProviders.append(provider)
-//
-//            func updateModelCompletionHandler(updateContext: MLUpdateContext) {
-//                print("DONE")
-//                print(updateContext.task.error)
-//                // Save the updated model to the file system.
-//                let updatedModel = updateContext.model
-//                let fileManager = FileManager.default
-//                let directory = NSTemporaryDirectory()
-//                var updatedModelURL = NSURL.fileURL(withPathComponents: [directory, "personalized.mlmodelc"])!
-//                /// The temporary location of the updated Drawing Classifier model.
-//                var tempUpdatedModelURL = NSURL.fileURL(withPathComponents: [directory, "personalized_tmp.mlmodelc"])!
-//                do {
-//                    // Create a directory for the updated model.
-//                    try fileManager.createDirectory(at: tempUpdatedModelURL,
-//                                                    withIntermediateDirectories: true,
-//                                                    attributes: nil)
-//                    print(tempUpdatedModelURL)
-//                    print(updatedModel.modelDescription)
-//                    // Save the updated model to temporary filename.
-//                    try updatedModel.write(to: tempUpdatedModelURL)
-//
-//                    // Replace any previously updated model with this one.
-//                    _ = try fileManager.replaceItemAt(updatedModelURL,
-//                                                      withItemAt: tempUpdatedModelURL)
-//
-//                    print("Updated model saved to:\n\t\(updatedModelURL)")
-//                } catch let error {
-//                    print("Could not save updated model to the file system: \(error)")
-//                    return
-//                }
-//
-//
-//
-//                guard FileManager.default.fileExists(atPath: updatedModelURL.path) else {
-//                    // The updated model is not present at its designated path.
-//                    return
-//                }
-//
-//                // Create an instance of the updated model.
-//                self.m = BertForQuestionAnswering(try! bert_classifier(contentsOf: updatedModelURL))
-//
-//                // Inform the calling View Controller when the update is complete
-//        //                DispatchQueue.main.async { completionHandler() }
-//            }
-//
-//            do {
-//                let updateTask = try! MLUpdateTask(forModelAt: bert_classifier.urlOfModelInThisBundle, trainingData: MLArrayBatchProvider(array: featureProviders), completionHandler: updateModelCompletionHandler)
-//
-//                updateTask.resume()
-//            } catch {
-//                print(error)
-//                return
-//            }
-            
-        
-        
-//        for i in 0..<384 {
-//            for j in 0..<384 {
-//                input[[0, 0, i, j] as [NSNumber]] = Double.random(in:0...2) as NSNumber
-//            }
-//        }
-        
-        
         let tempDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
 
-        // Create a destination URL.
         let targetURL = tempDirectoryURL.appendingPathComponent("poet").appendingPathExtension("txy")
-                
-        let clock = ContinuousClock()
+                        
+         for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 16, 45, 45], dataType: .float16)
+ for d1 in 0..<16 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 16, 45, 45], dataType: .float16)
+ for d2 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 16, 45, 45], dataType: .float16)
+ for d3 in 0..<45 {input[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! dropout_1_16_45_45_to_1_16_45_45_dtype_float32().prediction(input: dropout_1_16_45_45_to_1_16_45_45_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d2 in 0..<4096 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! dropout_1_45_4096_to_1_45_4096_dtype_float32().prediction(input: dropout_1_45_4096_to_1_45_4096_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45], dataType: .float16)
+ for d1 in 0..<45 {input[[d0,d1] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! embedding_1_45_to_1_45_4096_dtype_int64().prediction(input: embedding_1_45_to_1_45_4096_dtype_int64Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d2 in 0..<4096 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! layernorm_1_45_4096_to_1_45_4096_dtype_float32().prediction(input: layernorm_1_45_4096_to_1_45_4096_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 16384], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 16384], dataType: .float16)
+ for d2 in 0..<16384 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! linear_1_45_16384_to_1_45_4096_dtype_float32().prediction(input: linear_1_45_16384_to_1_45_4096_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d2 in 0..<4096 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! linear_1_45_4096_to_1_45_16384_dtype_float32().prediction(input: linear_1_45_4096_to_1_45_16384_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 4096], dataType: .float16)
+ for d2 in 0..<4096 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! linear_1_45_4096_to_1_45_4096_dtype_float32().prediction(input: linear_1_45_4096_to_1_45_4096_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [45, 4096], dataType: .float16)
+ for d1 in 0..<4096 {input[[d0,d1] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! linear_45_4096_to_45_50400_dtype_float32().prediction(input: linear_45_4096_to_45_50400_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}} for d0 in 0..<1 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 16384], dataType: .float16)
+ for d1 in 0..<45 {for i in 0..<100 {let input = try! MLMultiArray(shape: [1, 45, 16384], dataType: .float16)
+ for d2 in 0..<16384 {input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}input[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+}let prediction = try! newgeluactivation_1_45_16384_to_1_45_16384_dtype_float32().prediction(input: newgeluactivation_1_45_16384_to_1_45_16384_dtype_float32Input(input: input))usleep(100000)DispatchQueue.main.async {self.answerLabel.text = "prediction " + String(i + 1) + "/100"}}
+
+        // pageout_input
+
+        for i in 0..<100 {
+            do {
+                try (
+                    withUnsafeBytes(of: arr) { Data($0) }
+                ).write(to: targetURL)
+            } catch {
+                print(error)
+            }
+            usleep(25000)
+
+            DispatchQueue.main.async {
+                self.answerLabel.text = "paging " + String(i + 1) + "/100"
+            }
+        }
+
+        usleep(1000000)
         
-        for _ in 0..<100 {
-            
-            let input = try! MLMultiArray(shape: [3072], dataType: .float64)
-            
-            for i in 0..<3072 {
-                input[[i] as [NSNumber]] = Double.random(in:0...2) as NSNumber
+        for i in 0..<100 {
+            do {
+                let fileHandle = try (FileHandle(forReadingFrom: targetURL))
+                // pagein_input
+                fileHandle.closeFile()
+            } catch {
+                print("ERROR WHEN PAGING IN")
             }
             
-            let result = clock.measure {
-                let prediction = try! self.isolatedLayer.prediction(input: isolated_layerInput(input: input))
-                
-                // Paging simulation below
-                for i in 0..<100 {
-                    do {
-                        let len = prediction.var_5.count
-                        let arr = Array(repeating: Double(i) * 1.1, count: len)
-                        try (
-                            withUnsafeBytes(of: arr) { Data($0) }
-                        ).write(to: targetURL)
-                    } catch {
-                        print(error)
-                    }
-                }
+            usleep(25000)
+
+            DispatchQueue.main.async {
+                self.answerLabel.text = "paging in " + String(i + 1) + "/100"
             }
-            print(result)
         }
         
         print("DONE PREDICTING")
         
-            DispatchQueue.main.async {
-//                self.answerLabel.text = prediction.var_4
-                self.loaderView.isLoading = false
-//                self.say(text: prediction.answer)
-            }
+        DispatchQueue.main.async {
+            self.loaderView.isLoading = false
+        }
         
     }
     

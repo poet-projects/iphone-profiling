@@ -3,136 +3,153 @@ import json
 import math
 import os
 import re
-import subprocess
 from contextlib import redirect_stdout
+from dataclasses import dataclass
+from trace import write_coreml_model
 
-from torchinfo import summary
-
+import pyperclip
+import torch
+import torch.nn as nn
 from model import get_example_input, get_model
+from torchinfo import summary
+from tqdm import tqdm
 
-def generate_layer_summary(output_file="layers.txt"):
-    model = get_model()
+
+@dataclass
+class LayerInfo:
+    module: nn.Module
+    model_name: str
+    model_class_name: str
+    layer_key: str
+    layer_type: str
+    input_shape: list[int]
+    output_shape: list[int]
+    dtype: torch.Tensor.type
+
+
+def profile_all_layers():
+    model_instance = get_model()
     example_input = get_example_input()
 
     print("Generating layer summary...")
-    f = io.StringIO()
-    with redirect_stdout(f):
-        summary(
-            model,
-            input_data=example_input,
-            device="cpu",
-            depth=1000,
-            col_names=["input_size", "output_size", "num_params"],
-            mode="train",
-        )
-    out = f.getvalue()
 
-    lines = out.split("\n")
-    leaf_layers = []
+    with tqdm(total=0, miniters=1) as pbar:
+        layers = {}
 
+        def hook(module, inputs, outputs):
+            pbar.update(1)
+            layer_type = module.__class__.__name__
+            input_shape = list(inputs[0].shape)
+            output_shape = [len(outputs)] + list(outputs[0].shape)
+            dtype = inputs[0].dtype
+            # TODO: add more to the key for Conv2d, etc.
 
-    def get_layer_depth(line: str) -> int:
-        match = re.match(r"^(│\s+)+", line)
-        if match is None:
-            return 0
-        return match[0].count("│")
+            input_shape_str = "-".join([str(x) for x in input_shape])
+            output_shape_str = "-".join([str(x) for x in output_shape])
+            dtype_str = str(dtype).replace("torch.", "").lower()
+            model_name = f"{layer_type.lower()}-{input_shape_str}-to-{output_shape_str}-dtype-{dtype_str}"
+            model_class_name = model_name.replace("-", "_")
+            layer_key = "	".join(map(str, [layer_type, dtype, input_shape, output_shape]))
 
+            layers[model_name] = LayerInfo(
+                module,
+                model_name,
+                model_class_name,
+                layer_key,
+                layer_type,
+                input_shape,
+                output_shape,
+                dtype,
+            )
 
-    for i in range(len(lines)):
-        line_depth = get_layer_depth(lines[i])
-        next_line_depth = get_layer_depth(lines[i + 1]) if i + 1 < len(lines) else 0
-        if line_depth >= next_line_depth:
-            leaf_layers.append(lines[i])
+        def register_hooks(model: torch.nn.Module):
+            num_hooks = 0
+            children = list(model.children())
+            if len(children) == 0:
+                num_hooks += 1
+                model.register_forward_hook(hook)
+            for child in children:
+                num_hooks += register_hooks(child)
+            return num_hooks
 
-    actual_layers = re.findall(r"[|├└].+\[.+\].+\[.+\]", "\n".join(leaf_layers))
-    metadata_removed = [re.sub(r"\d+-\d+", "", layer) for layer in actual_layers]
-    padding_removed = [re.sub(r"^[|─├└\s]+", "", layer) for layer in metadata_removed]
-    whitespace_trimmed = [re.sub(r":?\s{2,}", "	", layer) for layer in padding_removed]
-    duplicates_removed = list(set(whitespace_trimmed))
-    final_layers = list(sorted(duplicates_removed))
+        pbar.total = register_hooks(model_instance)
+        model_instance(*example_input)
+
     
-    message = "\n".join(final_layers)
+    final_layers = list(sorted(layers.values(), key=lambda layer: layer.layer_key))
+    final_layer_keys = [layer.layer_key for layer in final_layers]
+
+    message = "\n".join(final_layer_keys)
     message += "\n\nTotal unique layers: " + str(len(final_layers))
-    layer_types = set([layer.split(":")[0] for layer in final_layers])
+    layer_types = set([layer.layer_type for layer in final_layers])
     message += "\nLayer types:	" + "	".join(layer_types)
     message += "\n\nUnique output shapes for paging:\n"
-    output_sizes = list(set(["[" + layer.split("[ ")[2] for layer in final_layers]))
+    output_sizes = list(
+        sorted(set([str(layer.output_shape) for layer in final_layers]))
+    )
     message += "\n".join(output_sizes)
 
-    subprocess.run("pbcopy", text=True, input=message)
-    with open(output_file, "w") as f:
-        f.write(message)
+    try:
+        pyperclip.copy(message)
+    except Exception as e:
+        print("ERROR: could not copy layer summary to clipboard")
     print(message)
-
-def profile_layer_by_layer(final_layers: list[str]):
-    with open("trace-skeleton.py", "r") as f:
-        trace_skeleton = f.read()
 
     with open("ViewControllerSkeleton.swift", "r") as f:
         swift_skeleton = f.read()
 
     swift_input = ""
 
-    for layer in final_layers:
-        split_layer = layer.split("	[")
-        layer_name = split_layer[0]
-        input_shape = json.loads("[" + split_layer[1])
-        output_shape = json.loads("[" + split_layer[2])
+    print("Writing CoreML model files for all layers...")
 
-        example_input = f"example_input = torch.rand({input_shape}, dtype=torch.float32)\n"
+    for layer in tqdm(final_layers, miniters=1):
+        input_shape = layer.input_shape
 
-        if layer_name == "Linear":
-            init = f"self.linear = nn.Linear({input_shape[-1]}, {output_shape[-1]}, dtype=torch.float32)\n"
-            forward = "self.linear(input)\n"
-        elif layer_name == "Conv2d":
-            continue # TODO
+        if "float" in str(layer.dtype):
+            example_input = torch.rand(input_shape, dtype=layer.dtype)
         else:
-            print("SKIPPING LAYER DUE TO UNKNOWN TYPE:", layer_name)
-            continue
+            example_input = torch.randint(0, 1000, input_shape, dtype=layer.dtype)
 
-        print("Preparing to profile layer " + layer, end=" ... ")
-
-        model_name = f"{layer_name.lower()}-{'-'.join(input_shape)}-to-{'-'.join(output_shape)}"
-        model_class_name = model_name.replace("-", "_")
-        save = f"model.save('../Resources/{model_name}.mlmodel')"
-
-        trace_skeleton = trace_skeleton.replace("# init", init)
-        trace_skeleton = trace_skeleton.replace("# forward", forward)
-        trace_skeleton = trace_skeleton.replace("# example_input", example_input)
-        trace_skeleton = trace_skeleton.replace("# save", save)
-
-        with redirect_stdout(open(os.devnull, 'w')):
-            exec(trace_skeleton)
+        write_coreml_model(layer.model_name, layer.module, example_input)
 
         joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
 
-        swift_input += \
-            "for i in 0..<100 {" \
-                f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .float16)\n" \
-                "".join([f" for d{i} in 0..<{input_shape[i]} {{" for i in range(len(input_shape))]) + \
-                f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n" \
-                "}" * len(input_shape) + \
-                f"let prediction = try! {model_class_name}().prediction(input: {model_class_name}Input(input: input))" \
-                "usleep(100000)" \
-                "DispatchQueue.main.async {" \
-                    "self.answerLabel.text = \"prediction \" + String(i + 1) + \"/100\"" \
-                "}" \
-            "}" \
-
+        swift_input += (
+            "for i in 0..<100 {"
+            f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .float16)\n"
+            "".join(
+                [
+                    f" for d{i} in 0..<{input_shape[i]} {{"
+                    for i in range(len(input_shape))
+                ]
+            )
+            + f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n"
+            "}" * len(input_shape)
+            + f"let prediction = try! {layer.model_class_name}().prediction(input: {layer.model_class_name}Input(input: input))"
+            "usleep(100000)"
+            "DispatchQueue.main.async {"
+            'self.answerLabel.text = "prediction " + String(i + 1) + "/100"'
+            "}"
+            "}"
+        )
         # total_output_size = math.prod(output_shape) # number of fp16's
         # # divide by 4 to account for Double --> fp16 conversion
         # pageout_input = f"let arr = (0..<{total_output_size // 4}).map {{ _ in Double.random(in: 1...5) }}\n"
         # # multiple by 2 because there are 2 bytes in every fp16
         # pagein_input = f"let _ = fileHandle.readData(ofLength: {total_output_size * 2})"
-        
+
     swift_skeleton = swift_skeleton.replace("// swift_input", swift_input)
-        # swift_skeleton = swift_skeleton.replace("// pageout_input", pageout_input)
-        # swift_skeleton = swift_skeleton.replace("// pagein_input", pagein_input)
+    # swift_skeleton = swift_skeleton.replace("// pageout_input", pageout_input)
+    # swift_skeleton = swift_skeleton.replace("// pagein_input", pagein_input)
 
     with open("../CoreMLBert/ViewController.swift", "w") as f:
         f.write(swift_skeleton)
 
-    print("READY!")
+    print("Done writing all CoreML models.")
+
+
+if __name__ == "__main__":
+    profile_all_layers()
 
 # unused strategies for tracing PyTorch (might be useful in the future):
 # - torch.jit.script and using the resulting code property
