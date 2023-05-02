@@ -30,21 +30,10 @@ class ViewController: UIViewController {
             self.loaderView.isLoading = false
         }
         
-        shuffle()
-        shuffleBtn.addTarget(self, action: #selector(shuffle), for: .touchUpInside)
         answerBtn.addTarget(self, action: #selector(answer), for: .touchUpInside)
         
         subjectField.flashScrollIndicators()
         questionField.flashScrollIndicators()
-    }
-    
-    @objc func shuffle() {
-        answerLabel.text = ""
-        guard let example = Squad.examples.randomElement() else {
-            return
-        }
-        subjectField.text = example.context
-        questionField.text = example.question
     }
     
     @objc func answer() {
@@ -54,42 +43,44 @@ class ViewController: UIViewController {
         let tempDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
 
         let targetURL = tempDirectoryURL.appendingPathComponent("poet").appendingPathExtension("txy")
-                        
-        // swift_input
 
-        // pageout_input
+        DispatchQueue.global().async {               
+            // swift_input
 
-        for i in 0..<100 {
-            do {
-                try (
-                    withUnsafeBytes(of: arr) { Data($0) }
-                ).write(to: targetURL)
-            } catch {
-                print(error)
-            }
-            usleep(25000)
+            // pageout_input
 
-            DispatchQueue.main.async {
-                self.answerLabel.text = "paging " + String(i + 1) + "/100"
-            }
-        }
+            // for i in 0..<100 {
+            //     do {
+            //         try (
+            //             withUnsafeBytes(of: arr) { Data($0) }
+            //         ).write(to: targetURL)
+            //     } catch {
+            //         print(error)
+            //     }
+            //     usleep(25000)
 
-        usleep(1000000)
-        
-        for i in 0..<100 {
-            do {
-                let fileHandle = try (FileHandle(forReadingFrom: targetURL))
-                // pagein_input
-                fileHandle.closeFile()
-            } catch {
-                print("ERROR WHEN PAGING IN")
-            }
+            //     DispatchQueue.main.async {
+            //         self.answerLabel.text = "paging " + String(i + 1) + "/100"
+            //     }
+            // }
+
+            // usleep(1000000)
             
-            usleep(25000)
+            // for i in 0..<100 {
+            //     do {
+            //         let fileHandle = try (FileHandle(forReadingFrom: targetURL))
+            //         // pagein_input
+            //         fileHandle.closeFile()
+            //     } catch {
+            //         print("ERROR WHEN PAGING IN")
+            //     }
+                
+            //     usleep(25000)
 
-            DispatchQueue.main.async {
-                self.answerLabel.text = "paging in " + String(i + 1) + "/100"
-            }
+            //     DispatchQueue.main.async {
+            //         self.answerLabel.text = "paging in " + String(i + 1) + "/100"
+            //     }
+            // }
         }
         
         print("DONE PREDICTING")

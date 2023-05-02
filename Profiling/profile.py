@@ -25,6 +25,7 @@ class LayerInfo:
     input_shape: list[int]
     output_shape: list[int]
     dtype: torch.Tensor.type
+    dtype_str: str
 
 
 def profile_all_layers():
@@ -49,7 +50,9 @@ def profile_all_layers():
             dtype_str = str(dtype).replace("torch.", "").lower()
             model_name = f"{layer_type.lower()}-{input_shape_str}-to-{output_shape_str}-dtype-{dtype_str}"
             model_class_name = model_name.replace("-", "_")
-            layer_key = "	".join(map(str, [layer_type, dtype, input_shape, output_shape]))
+            layer_key = "	".join(
+                map(str, [layer_type, dtype, input_shape, output_shape])
+            )
 
             layers[model_name] = LayerInfo(
                 module,
@@ -60,6 +63,7 @@ def profile_all_layers():
                 input_shape,
                 output_shape,
                 dtype,
+                dtype_str,
             )
 
         def register_hooks(model: torch.nn.Module):
@@ -75,7 +79,6 @@ def profile_all_layers():
         pbar.total = register_hooks(model_instance)
         model_instance(*example_input)
 
-    
     final_layers = list(sorted(layers.values(), key=lambda layer: layer.layer_key))
     final_layer_keys = [layer.layer_key for layer in final_layers]
 
@@ -102,7 +105,7 @@ def profile_all_layers():
 
     print("Writing CoreML model files for all layers...")
 
-    for layer in tqdm(final_layers, miniters=1):
+    for i, layer in enumerate(tqdm(final_layers, miniters=1)):
         input_shape = layer.input_shape
 
         if "float" in str(layer.dtype):
@@ -113,24 +116,24 @@ def profile_all_layers():
         write_coreml_model(layer.model_name, layer.module, example_input)
 
         joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
+        input_loops = "\n".join(
+            [f"for d{i} in 0..<{input_shape[i]} {{" for i in range(len(input_shape))]
+        )
 
         swift_input += (
-            "for i in 0..<100 {"
-            f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .float16)\n"
-            "".join(
-                [
-                    f" for d{i} in 0..<{input_shape[i]} {{"
-                    for i in range(len(input_shape))
-                ]
-            )
+            f"let {layer.model_class_name}_instance = {layer.model_class_name}()\n"
+            "for i in 0..<100 {\n"
+            f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .{layer.dtype_str})\n"
+            + input_loops
+            + "\n"
             + f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n"
-            "}" * len(input_shape)
-            + f"let prediction = try! {layer.model_class_name}().prediction(input: {layer.model_class_name}Input(input: input))"
-            "usleep(100000)"
-            "DispatchQueue.main.async {"
-            'self.answerLabel.text = "prediction " + String(i + 1) + "/100"'
-            "}"
-            "}"
+            + "}" * len(input_shape)
+            + f"\nlet prediction = try! {layer.model_class_name}_instance.prediction(input: {layer.model_class_name}Input(input: input))\n"
+            "usleep(25000)\n"
+            "DispatchQueue.main.async {\n"
+            f'self.answerLabel.text = "layer {i + 1}/{len(final_layers)} run " + String(i) + "/100"\n'
+            "}}\n"
+            "usleep(200000)\n\n"
         )
         # total_output_size = math.prod(output_shape) # number of fp16's
         # # divide by 4 to account for Double --> fp16 conversion
