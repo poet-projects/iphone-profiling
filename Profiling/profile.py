@@ -119,7 +119,9 @@ def profile_all_layers():
     message += "\nLayer types:	" + "	".join(layer_types)
     message += "\n\nUnique output sizes for paging:\n"
     output_types = sorted(
-        set([(math.prod(layer.output_shape), layer.dtype_str) for layer in final_layers])
+        set(
+            [(math.prod(layer.output_shape), layer.dtype_str) for layer in final_layers]
+        )
     )
     message += "\n".join(
         [
@@ -163,9 +165,9 @@ def profile_all_layers():
 
     for i, layer in enumerate(tqdm(final_layers, miniters=1)):
         if "float" in str(layer.dtype):
-            example_input = torch.rand(layer.input_shape, dtype=layer.dtype)
+            example_input = torch.rand(layer.input_shape, dtype=layer.dtype, device=example_input.device)
         else:
-            example_input = torch.randint(0, 1000, layer.input_shape, dtype=layer.dtype)
+            example_input = torch.randint(0, 1000, layer.input_shape, dtype=layer.dtype, device=example_input.device)
 
         write_coreml_model(layer.model_name, layer.module, example_input)
 
