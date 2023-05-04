@@ -17,9 +17,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var answerBtn: UIButton!
     @IBOutlet weak var answerLabel: UILabel!
     let loaderView = LoaderView()
-        
-    let isolatedLayer = isolated_layer()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +41,8 @@ class ViewController: UIViewController {
 
         let targetURL = tempDirectoryURL.appendingPathComponent("poet").appendingPathExtension("txy")
 
-        DispatchQueue.global().async {               
+        DispatchQueue.global().async {
+            let start = 1              
             // swift_input
 
             // pageout_input
@@ -81,14 +79,14 @@ class ViewController: UIViewController {
             //         self.answerLabel.text = "paging in " + String(i + 1) + "/100"
             //     }
             // }
+
+            print("DONE PREDICTING")
+            
+            DispatchQueue.main.async {
+                self.loaderView.isLoading = false
+                self.answerLabel.text = "done"
+            }
         }
-        
-        print("DONE PREDICTING")
-        
-        DispatchQueue.main.async {
-            self.loaderView.isLoading = false
-        }
-        
     }
     
     func say(text: String) {

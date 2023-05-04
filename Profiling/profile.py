@@ -40,18 +40,49 @@ def profile_all_layers():
         def hook(module, inputs, outputs):
             pbar.update(1)
             layer_type = module.__class__.__name__
-            input_shape = list(inputs[0].shape)
-            output_shape = [len(outputs)] + list(outputs[0].shape)
+            input_shape = tuple(inputs[0].shape)
+            output_shape = (len(outputs),) + tuple(outputs[0].shape)
             dtype = inputs[0].dtype
-            # TODO: add more to the key for Conv2d, etc.
 
             input_shape_str = "-".join([str(x) for x in input_shape])
             output_shape_str = "-".join([str(x) for x in output_shape])
             dtype_str = str(dtype).replace("torch.", "").lower()
+
+            extra_params = []
+            if layer_type == "Conv2d":
+                extra_params += [
+                    module.kernel_size,
+                    module.stride,
+                    module.padding,
+                    module.dilation,
+                    module.groups,
+                ]
+            elif layer_type == "GroupNorm":
+                extra_params += [module.num_groups]
+
             model_name = f"{layer_type.lower()}-{input_shape_str}-to-{output_shape_str}-dtype-{dtype_str}"
+            if len(extra_params) > 0:
+                model_name += "-params-" + "-".join(
+                    map(
+                        lambda x: "-".join(map(str, x)) if type(x) is tuple else str(x),
+                        extra_params,
+                    )
+                )
             model_class_name = model_name.replace("-", "_")
+
             layer_key = "	".join(
-                map(str, [layer_type, dtype, input_shape, output_shape])
+                map(
+                    str,
+                    [
+                        layer_type,
+                        dtype_str,
+                        input_shape,
+                        output_shape,
+                        ""
+                        if len(extra_params) == 0
+                        else ", ".join(map(str, extra_params)),
+                    ],
+                )
             )
 
             layers[model_name] = LayerInfo(
@@ -86,11 +117,16 @@ def profile_all_layers():
     message += "\n\nTotal unique layers: " + str(len(final_layers))
     layer_types = set([layer.layer_type for layer in final_layers])
     message += "\nLayer types:	" + "	".join(layer_types)
-    message += "\n\nUnique output shapes for paging:\n"
-    output_sizes = list(
-        sorted(set([str(layer.output_shape) for layer in final_layers]))
+    message += "\n\nUnique output sizes for paging:\n"
+    output_types = sorted(
+        set([(math.prod(layer.output_shape), layer.dtype_str) for layer in final_layers])
     )
-    message += "\n".join(output_sizes)
+    message += "\n".join(
+        [
+            str(output_shape) + "	" + dtype_str
+            for output_shape, dtype_str in output_types
+        ]
+    )
 
     try:
         pyperclip.copy(message)
@@ -101,39 +137,50 @@ def profile_all_layers():
     with open("ViewControllerSkeleton.swift", "r") as f:
         swift_skeleton = f.read()
 
-    swift_input = ""
+    swift_input = f"let end = {len(final_layers)}\n"
 
     print("Writing CoreML model files for all layers...")
 
-    for i, layer in enumerate(tqdm(final_layers, miniters=1)):
-        input_shape = layer.input_shape
-
-        if "float" in str(layer.dtype):
-            example_input = torch.rand(input_shape, dtype=layer.dtype)
-        else:
-            example_input = torch.randint(0, 1000, input_shape, dtype=layer.dtype)
-
-        write_coreml_model(layer.model_name, layer.module, example_input)
-
-        joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
+    input_types = set([(layer.input_shape, layer.dtype_str) for layer in final_layers])
+    for i, input_type in enumerate(input_types):
+        input_shape, dtype_str = input_type
         input_loops = "\n".join(
             [f"for d{i} in 0..<{input_shape[i]} {{" for i in range(len(input_shape))]
         )
+        swift_dtype = "Double" if "float" in dtype_str else "Int"
+        joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
+        input_name = f"input_{'_'.join(map(str, input_shape))}"
+        swift_input += (
+            "DispatchQueue.main.async {\n"
+            f'self.answerLabel.text = "Generating input shape {i + 1}/{len(input_types)}"\n'
+            "}\n"
+            f"let {input_name} = try! MLMultiArray(shape: {list(input_shape)}, dataType: .{dtype_str})\n"
+            + input_loops
+            + f"\n{input_name}[[{joined_counters}] as [NSNumber]] = {swift_dtype}.random(in:0...1000) as NSNumber\n"
+            + "}" * len(input_shape)
+            + "\n\n"
+        )
+
+    for i, layer in enumerate(tqdm(final_layers, miniters=1)):
+        if "float" in str(layer.dtype):
+            example_input = torch.rand(layer.input_shape, dtype=layer.dtype)
+        else:
+            example_input = torch.randint(0, 1000, layer.input_shape, dtype=layer.dtype)
+
+        write_coreml_model(layer.model_name, layer.module, example_input)
 
         swift_input += (
-            f"let {layer.model_class_name}_instance = {layer.model_class_name}()\n"
+            f"if start...end ~= {i + 1} {{\n"
+            f"var {layer.model_class_name}_instance: {layer.model_class_name}? = {layer.model_class_name}()\n"
             "for i in 0..<100 {\n"
-            f"let input = try! MLMultiArray(shape: {input_shape}, dataType: .{layer.dtype_str})\n"
-            + input_loops
-            + "\n"
-            + f"input[[{joined_counters}] as [NSNumber]] = Double.random(in:0...2) as NSNumber\n"
-            + "}" * len(input_shape)
-            + f"\nlet prediction = try! {layer.model_class_name}_instance.prediction(input: {layer.model_class_name}Input(input: input))\n"
-            "usleep(25000)\n"
+            + f"try! {layer.model_class_name}_instance!.prediction(input: {layer.model_class_name}Input(input: input_{'_'.join(map(str, layer.input_shape))}))\n"
+            "usleep(10000)\n"
             "DispatchQueue.main.async {\n"
-            f'self.answerLabel.text = "layer {i + 1}/{len(final_layers)} run " + String(i) + "/100"\n'
+            f'self.answerLabel.text = "layer {i + 1}/{len(final_layers)} run " + String(i + 1) + "/100"\n'
             "}}\n"
-            "usleep(200000)\n\n"
+            f"{layer.model_class_name}_instance = nil\n"
+            "usleep(200000)\n"
+            "}\n\n"
         )
         # total_output_size = math.prod(output_shape) # number of fp16's
         # # divide by 4 to account for Double --> fp16 conversion
