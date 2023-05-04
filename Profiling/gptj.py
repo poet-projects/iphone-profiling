@@ -1,5 +1,6 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+
 def get_example_input():
     tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
 
@@ -10,6 +11,7 @@ def get_example_input():
     )
 
     return tokenizer(prompt, return_tensors="pt").input_ids
+
 
 def get_model():
     print("Loading GPT-J into memory...")

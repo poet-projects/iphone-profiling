@@ -31,4 +31,4 @@ def write_coreml_model(model_name: str, operation, example_input: np.ndarray):
     )
     sys.stderr = old_stderr
 
-    model.save(f"../Resources/{model_name}.mlmodel") 
+    model.save(f"../Resources/{model_name}.mlmodel")

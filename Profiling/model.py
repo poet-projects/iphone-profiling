@@ -1,1 +1,1 @@
-from stablediffusionfloat32 import get_example_input, get_model
+from stablediffusionfloat16 import get_example_input, get_model
