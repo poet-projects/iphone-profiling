@@ -11,7 +11,6 @@ import pyperclip
 import torch
 import torch.nn as nn
 from model import get_example_input, get_model
-from torchinfo import summary
 from tqdm import tqdm
 
 
@@ -164,10 +163,12 @@ def profile_all_layers():
         )
 
     for i, layer in enumerate(tqdm(final_layers, miniters=1)):
+        device = example_input[0].device if type(example_input) is tuple else example_input.device
+
         if "float" in str(layer.dtype):
-            example_input = torch.rand(layer.input_shape, dtype=layer.dtype, device=example_input.device)
+            example_input = torch.rand(layer.input_shape, dtype=layer.dtype, device=device)
         else:
-            example_input = torch.randint(0, 1000, layer.input_shape, dtype=layer.dtype, device=example_input.device)
+            example_input = torch.randint(0, 1000, layer.input_shape, dtype=layer.dtype, device=device)
 
         write_coreml_model(layer.model_name, layer.module, example_input)
 
