@@ -48,150 +48,6 @@ class ViewController: UIViewController {
 DispatchQueue.main.async {
 self.answerLabel.text = "Generating input shape 1/27"
 }
-let input_2 = try! MLMultiArray(shape: [2], dataType: .float32)
-for d0 in 0..<2 {
-input_2[[d0] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 2/27"
-}
-let input_2_2304_2560 = try! MLMultiArray(shape: [2, 2304, 2560], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<2304 {
-for d2 in 0..<2560 {
-input_2_2304_2560[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 3/27"
-}
-let input_2_1280 = try! MLMultiArray(shape: [2, 1280], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<1280 {
-input_2_1280[[d0,d1] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 4/27"
-}
-let input_2_640_24_24 = try! MLMultiArray(shape: [2, 640, 24, 24], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<640 {
-for d2 in 0..<24 {
-for d3 in 0..<24 {
-input_2_640_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 5/27"
-}
-let input_2_640_96_96 = try! MLMultiArray(shape: [2, 640, 96, 96], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<640 {
-for d2 in 0..<96 {
-for d3 in 0..<96 {
-input_2_640_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 6/27"
-}
-let input_2_576_1280 = try! MLMultiArray(shape: [2, 576, 1280], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<576 {
-for d2 in 0..<1280 {
-input_2_576_1280[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 7/27"
-}
-let input_2_576_5120 = try! MLMultiArray(shape: [2, 576, 5120], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<576 {
-for d2 in 0..<5120 {
-input_2_576_5120[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 8/27"
-}
-let input_2_2560_24_24 = try! MLMultiArray(shape: [2, 2560, 24, 24], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<2560 {
-for d2 in 0..<24 {
-for d3 in 0..<24 {
-input_2_2560_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 9/27"
-}
-let input_2_4_96_96 = try! MLMultiArray(shape: [2, 4, 96, 96], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<4 {
-for d2 in 0..<96 {
-for d3 in 0..<96 {
-input_2_4_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 10/27"
-}
-let input_2_1280_48_48 = try! MLMultiArray(shape: [2, 1280, 48, 48], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<1280 {
-for d2 in 0..<48 {
-for d3 in 0..<48 {
-input_2_1280_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 11/27"
-}
-let input_2_960_96_96 = try! MLMultiArray(shape: [2, 960, 96, 96], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<960 {
-for d2 in 0..<96 {
-for d3 in 0..<96 {
-input_2_960_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 12/27"
-}
-let input_2_1280_12_12 = try! MLMultiArray(shape: [2, 1280, 12, 12], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<1280 {
-for d2 in 0..<12 {
-for d3 in 0..<12 {
-input_2_1280_12_12[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 13/27"
-}
-let input_2_320_96_96 = try! MLMultiArray(shape: [2, 320, 96, 96], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<320 {
-for d2 in 0..<96 {
-for d3 in 0..<96 {
-input_2_320_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 14/27"
-}
-let input_2_320 = try! MLMultiArray(shape: [2, 320], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<320 {
-input_2_320[[d0,d1] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 15/27"
-}
 let input_2_320_48_48 = try! MLMultiArray(shape: [2, 320, 48, 48], dataType: .float32)
 for d0 in 0..<2 {
 for d1 in 0..<320 {
@@ -201,17 +57,7 @@ input_2_320_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as N
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 16/27"
-}
-let input_2_77_1024 = try! MLMultiArray(shape: [2, 77, 1024], dataType: .float32)
-for d0 in 0..<2 {
-for d1 in 0..<77 {
-for d2 in 0..<1024 {
-input_2_77_1024[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
-}}}
-
-DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 17/27"
+self.answerLabel.text = "Generating input shape 2/27"
 }
 let input_2_1920_48_48 = try! MLMultiArray(shape: [2, 1920, 48, 48], dataType: .float32)
 for d0 in 0..<2 {
@@ -222,17 +68,17 @@ input_2_1920_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as 
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 18/27"
+self.answerLabel.text = "Generating input shape 3/27"
 }
-let input_2_144_1280 = try! MLMultiArray(shape: [2, 144, 1280], dataType: .float32)
+let input_2_77_1024 = try! MLMultiArray(shape: [2, 77, 1024], dataType: .float32)
 for d0 in 0..<2 {
-for d1 in 0..<144 {
-for d2 in 0..<1280 {
-input_2_144_1280[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+for d1 in 0..<77 {
+for d2 in 0..<1024 {
+input_2_77_1024[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
 }}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 19/27"
+self.answerLabel.text = "Generating input shape 4/27"
 }
 let input_2_960_48_48 = try! MLMultiArray(shape: [2, 960, 48, 48], dataType: .float32)
 for d0 in 0..<2 {
@@ -243,7 +89,17 @@ input_2_960_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as N
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 20/27"
+self.answerLabel.text = "Generating input shape 5/27"
+}
+let input_2_144_1280 = try! MLMultiArray(shape: [2, 144, 1280], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<144 {
+for d2 in 0..<1280 {
+input_2_144_1280[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 6/27"
 }
 let input_2_1280_24_24 = try! MLMultiArray(shape: [2, 1280, 24, 24], dataType: .float32)
 for d0 in 0..<2 {
@@ -254,7 +110,7 @@ input_2_1280_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as 
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 21/27"
+self.answerLabel.text = "Generating input shape 7/27"
 }
 let input_2_2304_640 = try! MLMultiArray(shape: [2, 2304, 640], dataType: .float32)
 for d0 in 0..<2 {
@@ -264,7 +120,7 @@ input_2_2304_640[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNum
 }}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 22/27"
+self.answerLabel.text = "Generating input shape 8/27"
 }
 let input_2_9216_1280 = try! MLMultiArray(shape: [2, 9216, 1280], dataType: .float32)
 for d0 in 0..<2 {
@@ -274,7 +130,7 @@ input_2_9216_1280[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNu
 }}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 23/27"
+self.answerLabel.text = "Generating input shape 9/27"
 }
 let input_2_9216_320 = try! MLMultiArray(shape: [2, 9216, 320], dataType: .float32)
 for d0 in 0..<2 {
@@ -284,7 +140,7 @@ input_2_9216_320[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNum
 }}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 24/27"
+self.answerLabel.text = "Generating input shape 10/27"
 }
 let input_2_2560_12_12 = try! MLMultiArray(shape: [2, 2560, 12, 12], dataType: .float32)
 for d0 in 0..<2 {
@@ -295,7 +151,7 @@ input_2_2560_12_12[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as 
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 25/27"
+self.answerLabel.text = "Generating input shape 11/27"
 }
 let input_2_144_5120 = try! MLMultiArray(shape: [2, 144, 5120], dataType: .float32)
 for d0 in 0..<2 {
@@ -305,7 +161,7 @@ input_2_144_5120[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNum
 }}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 26/27"
+self.answerLabel.text = "Generating input shape 12/27"
 }
 let input_2_640_48_48 = try! MLMultiArray(shape: [2, 640, 48, 48], dataType: .float32)
 for d0 in 0..<2 {
@@ -316,7 +172,17 @@ input_2_640_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as N
 }}}}
 
 DispatchQueue.main.async {
-self.answerLabel.text = "Generating input shape 27/27"
+self.answerLabel.text = "Generating input shape 13/27"
+}
+let input_2_2304_2560 = try! MLMultiArray(shape: [2, 2304, 2560], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<2304 {
+for d2 in 0..<2560 {
+input_2_2304_2560[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 14/27"
 }
 let input_2_1920_24_24 = try! MLMultiArray(shape: [2, 1920, 24, 24], dataType: .float32)
 for d0 in 0..<2 {
@@ -325,6 +191,140 @@ for d2 in 0..<24 {
 for d3 in 0..<24 {
 input_2_1920_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
 }}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 15/27"
+}
+let input_2_1280 = try! MLMultiArray(shape: [2, 1280], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<1280 {
+input_2_1280[[d0,d1] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 16/27"
+}
+let input_2_640_24_24 = try! MLMultiArray(shape: [2, 640, 24, 24], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<640 {
+for d2 in 0..<24 {
+for d3 in 0..<24 {
+input_2_640_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 17/27"
+}
+let input_2 = try! MLMultiArray(shape: [2], dataType: .float32)
+for d0 in 0..<2 {
+input_2[[d0] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 18/27"
+}
+let input_2_576_1280 = try! MLMultiArray(shape: [2, 576, 1280], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<576 {
+for d2 in 0..<1280 {
+input_2_576_1280[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 19/27"
+}
+let input_2_640_96_96 = try! MLMultiArray(shape: [2, 640, 96, 96], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<640 {
+for d2 in 0..<96 {
+for d3 in 0..<96 {
+input_2_640_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 20/27"
+}
+let input_2_576_5120 = try! MLMultiArray(shape: [2, 576, 5120], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<576 {
+for d2 in 0..<5120 {
+input_2_576_5120[[d0,d1,d2] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 21/27"
+}
+let input_2_2560_24_24 = try! MLMultiArray(shape: [2, 2560, 24, 24], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<2560 {
+for d2 in 0..<24 {
+for d3 in 0..<24 {
+input_2_2560_24_24[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 22/27"
+}
+let input_2_4_96_96 = try! MLMultiArray(shape: [2, 4, 96, 96], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<4 {
+for d2 in 0..<96 {
+for d3 in 0..<96 {
+input_2_4_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 23/27"
+}
+let input_2_1280_48_48 = try! MLMultiArray(shape: [2, 1280, 48, 48], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<1280 {
+for d2 in 0..<48 {
+for d3 in 0..<48 {
+input_2_1280_48_48[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 24/27"
+}
+let input_2_320_96_96 = try! MLMultiArray(shape: [2, 320, 96, 96], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<320 {
+for d2 in 0..<96 {
+for d3 in 0..<96 {
+input_2_320_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 25/27"
+}
+let input_2_960_96_96 = try! MLMultiArray(shape: [2, 960, 96, 96], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<960 {
+for d2 in 0..<96 {
+for d3 in 0..<96 {
+input_2_960_96_96[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 26/27"
+}
+let input_2_1280_12_12 = try! MLMultiArray(shape: [2, 1280, 12, 12], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<1280 {
+for d2 in 0..<12 {
+for d3 in 0..<12 {
+input_2_1280_12_12[[d0,d1,d2,d3] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}}}
+
+DispatchQueue.main.async {
+self.answerLabel.text = "Generating input shape 27/27"
+}
+let input_2_320 = try! MLMultiArray(shape: [2, 320], dataType: .float32)
+for d0 in 0..<2 {
+for d1 in 0..<320 {
+input_2_320[[d0,d1] as [NSNumber]] = Double.random(in:0...1000) as NSNumber
+}}
 
 if start...end ~= 1 {
 var conv2d_2_1280_12_12_to_2_1280_12_12_dtype_float32_params_3_3_1_1_1_1_1_1_1_instance: conv2d_2_1280_12_12_to_2_1280_12_12_dtype_float32_params_3_3_1_1_1_1_1_1_1? = conv2d_2_1280_12_12_to_2_1280_12_12_dtype_float32_params_3_3_1_1_1_1_1_1_1()
@@ -1485,423 +1485,499 @@ usleep(200000)
                 let data_2560 = Data(repeating: 1, count: 2560)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_2560_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_2560)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 1/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_5120 = Data(repeating: 1, count: 5120)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_5120_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_5120)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 2/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_10240 = Data(repeating: 1, count: 10240)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_10240_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_10240)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 3/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_197120 = Data(repeating: 1, count: 197120)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_197120_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_197120)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 4/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_294912 = Data(repeating: 1, count: 294912)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_294912_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_294912)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 5/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_394240 = Data(repeating: 1, count: 394240)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_394240_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_394240)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 6/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_788480 = Data(repeating: 1, count: 788480)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_788480_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_788480)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 7/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_1474560 = Data(repeating: 1, count: 1474560)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_1474560_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_1474560)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 8/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_2949120 = Data(repeating: 1, count: 2949120)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_2949120_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_2949120)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 9/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_5898240 = Data(repeating: 1, count: 5898240)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_5898240_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_5898240)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 10/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_8847360 = Data(repeating: 1, count: 8847360)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_8847360_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_8847360)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 11/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_11796480 = Data(repeating: 1, count: 11796480)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_11796480_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_11796480)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 12/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_17694720 = Data(repeating: 1, count: 17694720)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_17694720_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_17694720)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 13/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_23592960 = Data(repeating: 1, count: 23592960)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_23592960_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_23592960)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 14/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_35389440 = Data(repeating: 1, count: 35389440)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_35389440_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_35389440)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 15/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_47185920 = Data(repeating: 1, count: 47185920)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_47185920_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_47185920)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 16/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_70778880 = Data(repeating: 1, count: 70778880)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_70778880_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_70778880)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 17/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_94371840 = Data(repeating: 1, count: 94371840)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_94371840_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_94371840)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 18/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 let data_188743680 = Data(repeating: 1, count: 188743680)
 for i in 0..<100 {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_188743680_run_" + String(i)).appendingPathExtension("txy")
+FileManager.default.createFile(atPath: targetURL.path, contents: Data())
 let fileHandle = try FileHandle(forWritingTo: targetURL)
 fileHandle.write(data_188743680)
 try fileHandle.synchronize()
-try fileHandle.closeFile()
-usleep(25000)
+fileHandle.closeFile()
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pageout size 19/19 run " + String(i + 1) + "/100"
 }}
+usleep(200000)
 
 
 
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_2560_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 2560)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 1/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_5120_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 5120)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 2/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_10240_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 10240)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 3/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_197120_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 197120)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 4/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_294912_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 294912)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 5/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_394240_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 394240)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 6/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_788480_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 788480)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 7/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_1474560_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 1474560)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 8/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_2949120_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 2949120)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 9/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_5898240_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 5898240)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 10/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_8847360_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 8847360)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 11/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_11796480_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 11796480)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 12/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_17694720_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 17694720)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 13/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_23592960_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 23592960)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 14/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_35389440_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 35389440)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 15/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_47185920_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 47185920)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 16/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_70778880_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 70778880)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 17/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_94371840_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 94371840)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 18/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 for i in 0..<100 {
+try autoreleasepool {
 let targetURL = tempDirectoryURL.appendingPathComponent("size_188743680_run_" + String(i)).appendingPathExtension("txy")
 let fileHandle = try FileHandle(forReadingFrom: targetURL)
 try fileHandle.read(upToCount: 188743680)
 fileHandle.closeFile()
-usleep(25000)
+usleep(5000)
 DispatchQueue.main.async {
 self.answerLabel.text = "pagein size 19/19 run " + String(i + 1) + "/100"
-}}
+}}}
+usleep(200000)
 
 
             } catch {

@@ -197,25 +197,29 @@ def profile_all_layers():
           f"let data_{num_bytes} = Data(repeating: 1, count: {num_bytes})\n"
           "for i in 0..<100 {\n"
           f'let targetURL = tempDirectoryURL.appendingPathComponent("size_{num_bytes}_run_" + String(i)).appendingPathExtension("txy")\n'
+          "FileManager.default.createFile(atPath: targetURL.path, contents: Data())\n"
           "let fileHandle = try FileHandle(forWritingTo: targetURL)\n"
           f"fileHandle.write(data_{num_bytes})\n"
           "try fileHandle.synchronize()\n"
           "fileHandle.closeFile()\n"
-          "usleep(25000)\n"
+          "usleep(5000)\n"
           "DispatchQueue.main.async {\n"
           f'self.answerLabel.text = "pageout size {i + 1}/{len(output_types)} run " + String(i + 1) + "/100"\n'
-          "}}\n\n"
+          "}}\n"
+          "usleep(200000)\n\n"
         )
         pagein_input += (
             "for i in 0..<100 {\n"
+            "try autoreleasepool {\n"
             f'let targetURL = tempDirectoryURL.appendingPathComponent("size_{num_bytes}_run_" + String(i)).appendingPathExtension("txy")\n'
             "let fileHandle = try FileHandle(forReadingFrom: targetURL)\n"
             f"try fileHandle.read(upToCount: {num_bytes})\n"
             "fileHandle.closeFile()\n"
-            "usleep(25000)\n"
+            "usleep(5000)\n"
             "DispatchQueue.main.async {\n"
             f'self.answerLabel.text = "pagein size {i + 1}/{len(output_types)} run " + String(i + 1) + "/100"\n'
-            "}}\n\n"
+            "}}}\n"
+            "usleep(200000)\n\n"
         )
     
     swift_skeleton = swift_skeleton.replace("// compute_input", compute_input)
