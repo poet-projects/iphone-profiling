@@ -200,7 +200,7 @@ def profile_all_layers():
           "let fileHandle = try FileHandle(forWritingTo: targetURL)\n"
           f"fileHandle.write(data_{num_bytes})\n"
           "try fileHandle.synchronize()\n"
-          "try fileHandle.closeFile()\n"
+          "fileHandle.closeFile()\n"
           "usleep(25000)\n"
           "DispatchQueue.main.async {\n"
           f'self.answerLabel.text = "pageout size {i + 1}/{len(output_types)} run " + String(i + 1) + "/100"\n'
