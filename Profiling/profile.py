@@ -133,12 +133,16 @@ def profile_all_layers():
         pyperclip.copy(message)
     except Exception as e:
         print("ERROR: could not copy layer summary to clipboard")
+    with open("layers.txt", "w") as f:
+        f.write(message)
     print(message)
 
     with open("ViewControllerSkeleton.swift", "r") as f:
         swift_skeleton = f.read()
 
-    swift_input = f"let end = {len(final_layers)}\n"
+    compute_input = f"let end = {len(final_layers)}\n"
+    pagein_input = ""
+    pageout_input = ""
 
     print("Writing CoreML model files for all layers...")
 
@@ -151,7 +155,7 @@ def profile_all_layers():
         swift_dtype = "Double" if "float" in dtype_str else "Int"
         joined_counters = ",".join([f"d{i}" for i in range(len(input_shape))])
         input_name = f"input_{'_'.join(map(str, input_shape))}"
-        swift_input += (
+        compute_input += (
             "DispatchQueue.main.async {\n"
             f'self.answerLabel.text = "Generating input shape {i + 1}/{len(input_types)}"\n'
             "}\n"
@@ -172,7 +176,7 @@ def profile_all_layers():
 
         write_coreml_model(layer.model_name, layer.module, example_input)
 
-        swift_input += (
+        compute_input += (
             f"if start...end ~= {i + 1} {{\n"
             f"var {layer.model_class_name}_instance: {layer.model_class_name}? = {layer.model_class_name}()\n"
             "for i in 0..<100 {\n"
@@ -185,15 +189,37 @@ def profile_all_layers():
             "usleep(200000)\n"
             "}\n\n"
         )
-        # total_output_size = math.prod(output_shape) # number of fp16's
-        # # divide by 4 to account for Double --> fp16 conversion
-        # pageout_input = f"let arr = (0..<{total_output_size // 4}).map {{ _ in Double.random(in: 1...5) }}\n"
-        # # multiple by 2 because there are 2 bytes in every fp16
-        # pagein_input = f"let _ = fileHandle.readData(ofLength: {total_output_size * 2})"
 
-    swift_skeleton = swift_skeleton.replace("// swift_input", swift_input)
-    # swift_skeleton = swift_skeleton.replace("// pageout_input", pageout_input)
-    # swift_skeleton = swift_skeleton.replace("// pagein_input", pagein_input)
+    for i, output_type in enumerate(output_types):
+        output_size, dtype_str = output_type
+        num_bytes = output_size * int(re.findall(r"\d+$", dtype_str)[0]) // 8
+        pageout_input += (
+          f"let data_{num_bytes} = Data(repeating: 1, count: {num_bytes})\n"
+          "for i in 0..<100 {\n"
+          f'let targetURL = tempDirectoryURL.appendingPathComponent("size_{num_bytes}_run_" + String(i)).appendingPathExtension("txy")\n'
+          "let fileHandle = try FileHandle(forWritingTo: targetURL)\n"
+          f"fileHandle.write(data_{num_bytes})\n"
+          "try fileHandle.synchronize()\n"
+          "try fileHandle.closeFile()\n"
+          "usleep(25000)\n"
+          "DispatchQueue.main.async {\n"
+          f'self.answerLabel.text = "pageout size {i + 1}/{len(output_types)} run " + String(i + 1) + "/100"\n'
+          "}}\n\n"
+        )
+        pagein_input += (
+            "for i in 0..<100 {\n"
+            f'let targetURL = tempDirectoryURL.appendingPathComponent("size_{num_bytes}_run_" + String(i)).appendingPathExtension("txy")\n'
+            "let fileHandle = try FileHandle(forReadingFrom: targetURL)\n"
+            f"try fileHandle.read(upToCount: {num_bytes})\n"
+            "fileHandle.closeFile()\n"
+            "usleep(25000)\n"
+            "DispatchQueue.main.async {\n"
+            f'self.answerLabel.text = "pagein size {i + 1}/{len(output_types)} run " + String(i + 1) + "/100"\n'
+            "}}\n\n"
+        )
+    
+    swift_skeleton = swift_skeleton.replace("// compute_input", compute_input)
+    swift_skeleton = swift_skeleton.replace("// page_input", pageout_input + "\n\n\n" + pagein_input)
 
     with open("../CoreMLBert/ViewController.swift", "w") as f:
         f.write(swift_skeleton)

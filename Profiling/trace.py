@@ -20,18 +20,20 @@ class IsolatedLayer(nn.Module):
 
 
 def write_coreml_model(model_name: str, operation, example_input: np.ndarray):
-    model = IsolatedLayer(operation)
+    filename = f"../Resources/{model_name}.mlmodel"
+    if not os.path.isfile(filename):
+        model = IsolatedLayer(operation)
 
-    traced_model = torch.jit.trace(model, example_input)
+        traced_model = torch.jit.trace(model, example_input)
 
-    old_stderr = sys.stderr
-    # sys.stderr = open(os.devnull, "w")
-    model = ct.convert(
-        traced_model,
-        inputs=[
-            ct.TensorType(shape=example_input.shape),
-        ],
-    )
-    sys.stderr = old_stderr
+        old_stderr = sys.stderr
+        sys.stderr = open(os.devnull, "w")
+        model = ct.convert(
+            traced_model,
+            inputs=[
+                ct.TensorType(shape=example_input.shape),
+            ],
+        )
+        sys.stderr = old_stderr
 
-    model.save(f"../Resources/{model_name}.mlmodel")
+        model.save(filename)
