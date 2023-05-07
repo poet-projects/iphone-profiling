@@ -58,6 +58,8 @@ def profile_all_layers():
                 ]
             elif layer_type == "GroupNorm":
                 extra_params += [module.num_groups]
+            elif layer_type == "Flatten":
+                extra_params += [module.start_dim, module.end_dim]
 
             model_name = f"{layer_type.lower()}-{input_shape_str}-to-{output_shape_str}-dtype-{dtype_str}"
             if len(extra_params) > 0:
@@ -180,7 +182,7 @@ def profile_all_layers():
             f"if start...end ~= {i + 1} {{\n"
             f"var {layer.model_class_name}_instance: {layer.model_class_name}? = {layer.model_class_name}()\n"
             "for i in 0..<100 {\n"
-            + f"try! {layer.model_class_name}_instance!.prediction(input: {layer.model_class_name}Input(input: input_{'_'.join(map(str, layer.input_shape))}))\n"
+            + f"try! {layer.model_class_name}_instance!.prediction(input: {layer.model_class_name}Input(x: input_{'_'.join(map(str, layer.input_shape))}))\n"
             "usleep(10000)\n"
             "DispatchQueue.main.async {\n"
             f'self.answerLabel.text = "layer {i + 1}/{len(final_layers)} run " + String(i + 1) + "/100"\n'

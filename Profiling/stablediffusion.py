@@ -1,11 +1,11 @@
 import torch
 from diffusers import DPMSolverMultistepScheduler, StableDiffusionPipeline, models
-
+from python_coreml_stable_diffusion import unet 
 
 def get_example_input_with_dtype(dtype):
-    sample = torch.randn(2, 4, 96, 96)  # .half().cuda()
-    timestep = torch.rand(1) * 999  # .half().cuda() * 999
-    encoder_hidden_states = torch.randn(2, 77, 1024)  # .half().cuda()
+    sample = torch.rand(2, 4, 96, 96)  # .half().cuda()
+    timestep = torch.rand(2) * 999  # .half().cuda() * 999
+    encoder_hidden_states = torch.rand(2, 1024, 1, 77)  # .half().cuda()
     if dtype == torch.float16:
         return tuple(
             map(lambda x: x.half().cuda(), (sample, timestep, encoder_hidden_states))
@@ -24,4 +24,4 @@ def get_model_with_dtype(dtype):
 
     print("Loaded model")
 
-    return pipe.unet
+    return unet.UNet2DConditionModel(**pipe.unet.config)
